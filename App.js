@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Image, Button, View, Text, StyleSheet,TouchableOpacity } from 'react-native';
+import { Image, Button, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import AgendamentosPage from './src/screens/AgendamentosPage.js'
@@ -37,11 +37,44 @@ function HomeButtons({ navigation }) {
 
 const Stack = createStackNavigator();
 
+function HomeTabs() {
+  return (
+    
+    <Tab.Navigator>
+      <Tab.Screen name="Home" component={HomeButtons} />
+      <Tab.Screenn name="Agendamento - Editar/Remover" component={AgendamentoDetail} />
+      <Tab.Screen name="Pet - Editar/Remover" component={PetDetail} />
+      <Tab.Screen name="Servico - Editar/Remover" component={ServicoDetail} />
+
+      <Tab.Screen name="Serviços" component={ServicosPage} />
+      <Tab.Screen name="Pets" component={PetPage} />
+      <Tab.Screen name="Agendamentos" component={AgendamentosPage} />
+    </Tab.Navigator>
+  );
+}
+
+
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Login" component={LoginPage} />
+      <Stack.Navigator initialRouteName="Login"
+      screenOptions={{
+        headerStyle: {
+          // backgroundColor: '#000',
+          
+        },
+        headerTintColor: '#b1b1b1',
+        headerTitleStyle: {
+          fontWeight:'normal',
+          // fontSize: 25
+        },
+      }}> 
+      
+        <Stack.Screen name="Login" component={LoginPage} 
+        options={{
+          headerTitle:"",
+           headerTransparent:true
+        }}/>
         <Stack.Screen name="Home" component={HomeButtons} />
 
         <Stack.Screen name="Agendamento - Editar/Remover" component={AgendamentoDetail} />

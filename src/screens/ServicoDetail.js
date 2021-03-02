@@ -1,47 +1,54 @@
 import React, { Component } from 'react';
-import { Text, Alert, TextInput,TouchableOpacity, View, StyleSheet } from 'react-native';
+import { Text, Alert, TextInput, TouchableOpacity, View, StyleSheet } from 'react-native';
 import ButtonStyledRed from '../components/ButtonStyledRed';
 import ButtonStyledGreen from '../components/ButtonStyledGreen';
+import FormRow from '../components/FormRow';
 
 type Props = {};
 export default class ServicoDetail extends Component<Props> {
-  
+
   onClickListener = (msg) => {
-    Alert.alert("Ação",msg);
+    Alert.alert("Ação", msg);
+  }
+  onChangeHandler(field, valor) {
+    this.setState({
+      [field]: valor
+    })
   }
   render() {
     return (
       <View style={styles.container}>
-        <Text></Text>
-
-        <View style={styles.inputContainer}>
+        <FormRow style={styles.inputContainer}>
           <TextInput style={styles.inputs}
             placeholder="Nome do Serviço"
-            keyboardType="text"
             underlineColorAndroid='transparent'
-          // onChangeText={(nomeservico) => this.setState({ nomeServico })} 
+            onChangeText={valor => {
+              this.onChangeHandler('nomeServico', valor)
+            }}
           />
-        </View>
-        <View style={styles.inputContainer}>
+        </FormRow>
+        <FormRow style={styles.inputContainer}>
           <TextInput style={styles.inputs}
             placeholder="Valor"
-            keyboardType="text"
             underlineColorAndroid='transparent'
-          // onChangeText={(valor) => this.setState({ valor })} 
+            onChangeText={valor => {
+              this.onChangeHandler('valor', valor)
+            }}
           />
-        </View>
-        <View style={styles.inputContainer}>
+        </FormRow>
+        <FormRow style={styles.inputContainer}>
           <TextInput style={styles.inputs}
-            placeholder="Tempo estimado"
-            keyboardType="text"
+            placeholder="Tempo Estimado"
             underlineColorAndroid='transparent'
-          // onChangeText={(tesmpoEstimado) => this.setState({ tesmpoEstimado })} 
+            onChangeText={valor => {
+              this.onChangeHandler('tempoEstimado', valor)
+            }}
           />
-        </View>
-        <TouchableOpacity  onPress={() => this.onClickListener('Serviço Salvo') }>
+        </FormRow>
+        <TouchableOpacity onPress={() => this.onClickListener('Serviço Salvo')}>
           <ButtonStyledGreen label={'SALVAR EDIÇÕES'} />
         </TouchableOpacity>
-        <TouchableOpacity   onPress={() => this.onClickListener('Serviço Removido') } >
+        <TouchableOpacity onPress={() => this.onClickListener('Serviço Removido')} >
           <ButtonStyledRed style={{ backgroundColor: "#E36363" }} label={'REMOVER'} />
         </TouchableOpacity>
       </View>
@@ -54,24 +61,25 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 5,
     borderBottomWidth: 1,
-    flexGrow:1,
+    flexGrow: 1,
     height: 45,
     marginBottom: 20,
     flexDirection: 'row',
     alignItems: 'center'
   },
   inputs: {
-    
+
     height: 45,
     paddingLeft: 10,
     borderBottomColor: '#FFFFFF',
     flexGrow: 1,
     textAlign: "center"
   },
-  container:{
+  container: {
+    marginTop: 20,
     padding: 5,
     paddingLeft: 15,
     paddingRight: 15,
-    alignItems:"center"
+    alignItems: "center"
   }
 })

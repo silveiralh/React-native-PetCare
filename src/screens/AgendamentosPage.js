@@ -64,48 +64,6 @@ export default class AgendamentosPage extends Component<Props> {
           "hora": "16:00"
         },
         {
-          "nomePet": "Zeca",
-          "servico": "Banho",
-          "data": "10/10/2020",
-          "hora": "13:00"
-        },
-        {
-          "nomePet": "Mabel",
-          "servico": "Banho + Tosa",
-          "data": "16/06/2020",
-          "hora": "16:20"
-        },
-        {
-          "nomePet": "Icarozinho",
-          "servico": "Banho + Hidratação",
-          "data": "10/10/2020",
-          "hora": "13:00"
-        },
-        {
-          "nomePet": "Adalberto",
-          "servico": "Hidratação",
-          "data": "10/10/2020",
-          "hora": "16:00"
-        },
-        {
-          "nomePet": "Zeca",
-          "servico": "Banho",
-          "data": "10/10/2020",
-          "hora": "13:00"
-        },
-        {
-          "nomePet": "Mabel",
-          "servico": "Banho + Tosa",
-          "data": "16/06/2020",
-          "hora": "16:20"
-        },
-        {
-          "nomePet": "Icarozinho",
-          "servico": "Banho + Hidratação",
-          "data": "10/10/2020",
-          "hora": "13:00"
-        },
-        {
           "nomePet": "Adalberto",
           "servico": "Hidratação",
           "data": "10/10/2020",

@@ -1,55 +1,64 @@
 import React, { Component } from 'react';
-import { Text, View, TextInput, Alert,TouchableOpacity,StyleSheet } from 'react-native';
+import { Text, View, TextInput, Alert, TouchableOpacity, StyleSheet } from 'react-native';
 import ButtonStyledGreen from '../components/ButtonStyledGreen';
 import ButtonStyledRed from '../components/ButtonStyledRed';
+import FormRow from '../components/FormRow';
 
 type Props = {};
 export default class PetDetail extends Component<Props> {
-  
+
   onClickListener = (msg) => {
-    Alert.alert("Ação",msg);
+    Alert.alert("Ação", msg);
+  }
+  onChangeHandler(field, valor) {
+    this.setState({
+      [field]: valor
+    })
   }
   render() {
     return (
       <View style={styles.container}>
-        <Text></Text>
-
-        <View style={styles.inputContainer}>
+        <FormRow style={styles.inputContainer}>
           <TextInput style={styles.inputs}
             placeholder="Nome do Pet"
-            keyboardType="text"
             underlineColorAndroid='transparent'
-          // onChangeText={(nomePet) => this.setState({ nomePet })} 
+            onChangeText={valor => {
+              this.onChangeHandler('nomePet', valor)
+            }}
           />
-        </View>
-        <View style={styles.inputContainer}>
+        </FormRow>
+
+        <FormRow style={styles.inputContainer}>
           <TextInput style={styles.inputs}
             placeholder="Porte"
-            keyboardType="text"
             underlineColorAndroid='transparent'
-          // onChangeText={(porte) => this.setState({ porte })} 
+            onChangeText={valor => {
+              this.onChangeHandler('porte', valor)
+            }}
           />
-        </View>
-        <View style={styles.inputContainer}>
+        </FormRow>
+        <FormRow style={styles.inputContainer}>
           <TextInput style={styles.inputs}
             placeholder="Tutor"
-            keyboardType="text"
             underlineColorAndroid='transparent'
-          // onChangeText={(tutor) => this.setState({ tutor })} 
+            onChangeText={valor => {
+              this.onChangeHandler('tutor', valor)
+            }}
           />
-        </View>
-        <View style={styles.inputContainer}>
+        </FormRow>
+        <FormRow style={styles.inputContainer}>
           <TextInput style={styles.inputs}
-            placeholder="Especie"
-            keyboardType="text"
+            placeholder="Espécie"
             underlineColorAndroid='transparent'
-          // onChangeText={(especie) => this.setState({ especie })} 
+            onChangeText={valor => {
+              this.onChangeHandler('especie', valor)
+            }}
           />
-        </View>
-        <TouchableOpacity onPress={() => this.onClickListener('Pet Salvo') } >
+        </FormRow>
+        <TouchableOpacity onPress={() => this.onClickListener('Pet Salvo')} >
           <ButtonStyledGreen label={'SALVAR EDIÇÕES'} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.onClickListener('Pet Removido') }  >
+        <TouchableOpacity onPress={() => this.onClickListener('Pet Removido')}  >
           <ButtonStyledRed style={{ backgroundColor: "#E36363" }} label={'REMOVER'} />
         </TouchableOpacity>
       </View>
@@ -62,24 +71,25 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 5,
     borderBottomWidth: 1,
-    flexGrow:1,
+    flexGrow: 1,
     height: 45,
     marginBottom: 20,
     flexDirection: 'row',
     alignItems: 'center'
   },
   inputs: {
-    
+
     height: 45,
     paddingLeft: 10,
     borderBottomColor: '#FFFFFF',
     flexGrow: 1,
     textAlign: "center"
   },
-  container:{
+  container: {
+    marginTop:20,
     padding: 5,
     paddingLeft: 15,
     paddingRight: 15,
-    alignItems:"center"
+    alignItems: "center"
   }
 })
