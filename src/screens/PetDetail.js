@@ -1,95 +1,102 @@
 import React, { Component } from 'react';
-import { Text, View, TextInput, Alert, TouchableOpacity, StyleSheet } from 'react-native';
-import ButtonStyledGreen from '../components/ButtonStyledGreen';
-import ButtonStyledRed from '../components/ButtonStyledRed';
-import FormRow from '../components/FormRow';
+import { Text, FlatList, Image,  View, StyleSheet } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import ButtonStyledGreen from '../components/ButtonStyledGreen.js';
+import ButtonStyledRed from '../components/ButtonStyledRed.js';
+import {connect} from 'react-redux';
+import {deletePet} from '../actions'
 
-type Props = {};
-export default class PetDetail extends Component<Props> {
+import CardPets from '../components/CardPets';
 
-  onClickListener = (msg) => {
-    Alert.alert("Ação", msg);
-  }
-  onChangeHandler(field, valor) {
-    this.setState({
-      [field]: valor
-    })
-  }
-  render() {
+
+const PetDetail = props => {
+    const { id, img, nomePet, porte, tutor, especie } = props.route.params.item;
+
+    
     return (
-      <View style={styles.container}>
-        <FormRow style={styles.inputContainer}>
-          <TextInput style={styles.inputs}
-            placeholder="Nome do Pet"
-            underlineColorAndroid='transparent'
-            onChangeText={valor => {
-              this.onChangeHandler('nomePet', valor)
-            }}
-          />
-        </FormRow>
+   
+        <View style={styles.container}>
+            <Image 
+            style={styles.avatar}
+                source={{
+                    uri: `data:image/jpeg;base64,${img}`                   
+                }}
+                resizeMode="cover"
+                aspectRatio={1}
+            />
+            <View style={styles.content}>
+                <View style={{flexDirection: 'row'}}>
+                    <Text style={styles.bold}>ID: </Text>
+                    <Text style={styles.normal}> {id} -  </Text>
+                    
+                </View>
+                <View style={{flexDirection: 'row'}}>
+                    <Text style={styles.bold}>{especie}</Text>
+                </View>
+                <View style={{flexDirection: 'row'}}>
+                    <Text  style={styles.bold}>Nome: </Text>
+                    <Text style={styles.normal}> {nomePet}   </Text>
+                </View>
+                <View style={{flexDirection: 'row'}}>
+                    <Text  style={styles.bold}>Porte:</Text>
+                    <Text style={styles.normal}> {porte}</Text>
+                </View>
+                <View style={{flexDirection: 'row'}}>
+                    <Text style={styles.bold}>Tutor:</Text>
+                    <Text style={styles.normal}> {tutor}</Text>
+                </View>
+                <TouchableOpacity style={{paddingLeft: 10}} onPress={() => props.navigation.replace('Pet - Editar/Remover', 
+                // {petToEdit:props.route.params.item}
+                )}
+                    // onPress={async () => {
+                    // await saveAgendamento(agendamentoForm)
+                    // navigation.goBack();
+                    // }}
+                    >
+                        <ButtonStyledGreen label={'EDITAR'} />
+                </TouchableOpacity>
+                <TouchableOpacity style={{paddingLeft: 10}} 
+                    onPress={async () => {
+                        const deletado = await props.deletePet(props.route.params.item);
+                        if(deletado){
+                            props.navigation.goBack()
+                        }
+                    }}  >
+                        <ButtonStyledRed style={{ backgroundColor: "#E36363" }} label={'REMOVER'} />
+                </TouchableOpacity>
+            </View>
+                        
+        </View>
+        )
 
-        <FormRow style={styles.inputContainer}>
-          <TextInput style={styles.inputs}
-            placeholder="Porte"
-            underlineColorAndroid='transparent'
-            onChangeText={valor => {
-              this.onChangeHandler('porte', valor)
-            }}
-          />
-        </FormRow>
-        <FormRow style={styles.inputContainer}>
-          <TextInput style={styles.inputs}
-            placeholder="Tutor"
-            underlineColorAndroid='transparent'
-            onChangeText={valor => {
-              this.onChangeHandler('tutor', valor)
-            }}
-          />
-        </FormRow>
-        <FormRow style={styles.inputContainer}>
-          <TextInput style={styles.inputs}
-            placeholder="Espécie"
-            underlineColorAndroid='transparent'
-            onChangeText={valor => {
-              this.onChangeHandler('especie', valor)
-            }}
-          />
-        </FormRow>
-        <TouchableOpacity onPress={() => this.onClickListener('Pet Salvo')} >
-          <ButtonStyledGreen label={'SALVAR EDIÇÕES'} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.onClickListener('Pet Removido')}  >
-          <ButtonStyledRed style={{ backgroundColor: "#E36363" }} label={'REMOVER'} />
-        </TouchableOpacity>
-      </View>
-    );
-  }
+    
 }
+export default connect(null,  {deletePet})(PetDetail);
 const styles = StyleSheet.create({
-  inputContainer: {
-    borderBottomColor: '#009688',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 5,
-    borderBottomWidth: 1,
-    flexGrow: 1,
-    height: 45,
-    marginBottom: 20,
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
-  inputs: {
-
-    height: 45,
-    paddingLeft: 10,
-    borderBottomColor: '#FFFFFF',
-    flexGrow: 1,
-    textAlign: "center"
-  },
-  container: {
-    marginTop:20,
-    padding: 5,
-    paddingLeft: 15,
-    paddingRight: 15,
-    alignItems: "center"
-  }
+    bold:{
+        fontSize: 18, 
+        fontWeight: 'bold',
+        paddingBottom: 10,
+    },
+     normal:{
+        fontSize: 18, 
+        paddingBottom: 10,
+    },
+    avatar:{
+        borderTopLeftRadius: 100/ 2,
+        borderTopRightRadius: 100/ 2,
+    },
+    container:{
+        shadowColor:"black",
+        margin:40,
+    },
+    content:{
+        padding: 30,
+        backgroundColor:"white",
+        height: 350,
+        borderBottomLeftRadius: 100/ 2,
+        borderBottomRightRadius: 100/ 2
+    }
+    
 })
+

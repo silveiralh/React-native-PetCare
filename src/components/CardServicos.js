@@ -4,11 +4,11 @@ import { StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native';
 
 const CardServicos = props => {
-    const { item , onPressItem} = props;
+    const { item , onPressItem, onNavigate} = props;
 
     return (
 
-        <TouchableOpacity onPress={ () =>{onPressItem()}}>
+        <TouchableOpacity onPress={onNavigate}>
             <View key={item.nomeServico} style={styles.line}>
                 <View style={styles.beginLline}> 
                     <Text style={styles.lineText}>{item.nomeServico}</Text>

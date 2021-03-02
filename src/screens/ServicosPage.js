@@ -1,130 +1,39 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet,ActivityIndicator } from 'react-native';
-import ListServicos from '../components/ListServicos.js'
+import { Text, View, FlatList, StyleSheet,ActivityIndicator } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import ButtonStyledGreen from '../components/ButtonStyledGreen.js';
+import servicos from '../servicos.json';
+import {connect} from 'react-redux';
+import {watchServicos} from '../actions';
+import CardServicos from '../components/CardServicos';
 
-
-type Props = {};
-export default class ServicotosPage extends Component<Props> {
-    constructor(props) {
-        super(props);
-        this.state = {
-            servicos: [],
-            loading: false
-        };
-    }
-    componentDidMount() {
-        this.setState({loading:true})
-        const { content } =
-        {
-            "content": [
-                {
-                    "nomeServico": "Banho - Porte Pequeno",
-                    "valor": "0,00",
-                    "tempoEstimado": "00h 40m"
-                },
-                {
-                    "nomeServico": "Tosa - Porte Pequeno",
-                    "valor": "15,00",
-                    "tempoEstimado": "01h 00m"
-                },
-                {
-                    "nomeServico": "Hidratação",
-                    "valor": "10,00",
-                    "tempoEstimado": "00h 30m"
-                },
-                {
-                    "nomeServico": "Hidratação",
-                    "valor": "10,00",
-                    "tempoEstimado": "00h 30m"
-                },
-                {
-                    "nomeServico": "Hidratação",
-                    "valor": "10,00",
-                    "tempoEstimado": "00h 30m"
-                },
-                {
-                    "nomeServico": "Hidratação",
-                    "valor": "10,00",
-                    "tempoEstimado": "00h 30m"
-                },
-                {
-                    "nomeServico": "Hidratação",
-                    "valor": "10,00",
-                    "tempoEstimado": "00h 30m"
-                },
-                {
-                    "nomeServico": "Banho - Porte Pequeno",
-                    "valor": "0,00",
-                    "tempoEstimado": "00h 40m"
-                },
-                {
-                    "nomeServico": "Tosa - Porte Pequeno",
-                    "valor": "15,00",
-                    "tempoEstimado": "01h 00m"
-                },
-                {
-                    "nomeServico": "Hidratação",
-                    "valor": "10,00",
-                    "tempoEstimado": "00h 30m"
-                },
-                {
-                    "nomeServico": "Hidratação",
-                    "valor": "10,00",
-                    "tempoEstimado": "00h 30m"
-                },
-                {
-                    "nomeServico": "Hidratação",
-                    "valor": "10,00",
-                    "tempoEstimado": "00h 30m"
-                },
-                {
-                    "nomeServico": "Hidratação",
-                    "valor": "10,00",
-                    "tempoEstimado": "00h 30m"
-                },
-                {
-                    "nomeServico": "Hidratação",
-                    "valor": "10,00",
-                    "tempoEstimado": "00h 30m"
-                }
-            ]
-        }
-
-        this.setState({
-            servicos: content,
-            loading:false
-        });
-        // const agendamentos = content.map(agendamento => agendamento.nomePet)//PARA PEGAR OS NOMES
-
+class ServicosPage extends Component{
+    componentDidMount(){
+        this.props.watchServicos();
     }
 
-
-
-    render() {
-        return (
-            <View style={styles.container}>
-                {
-          this.state.loading ? <ActivityIndicator size="large" color="#E36363"/> : null
-        }
+    render(){
+        return(
+             <View >
                 <TouchableOpacity style={styles.margem} onPress={() => this.props.navigation.navigate('Servico - Editar/Remover')}>
                     <ButtonStyledGreen
                         label={"ADICIONAR SERVIÇO"} />
                 </TouchableOpacity>
-                <ListServicos content={this.state.servicos} 
-                onPressItem={ () => this.props.navigation.navigate('Servico - Editar/Remover')}
-                returnPage={ () => this.props.navigation.navigate('Servicos')}/>
-
+                <FlatList 
+                    data={[...this.props.servicos]}
+                    renderItem={({item}) =>{
+                        return (
+                            <CardServicos item={item} 
+                            onNavigate={ () => this.props.navigation.navigate('Servico - Detalhes', {item:item})}/>
+                        )
+                    }}
+                    keyExtractor={item=> item.id.toString()}
+                />
             </View>
-        );
+        )
     }
 }
 const styles = StyleSheet.create({
-    container: {
-        // backgroundColor: '#E36363'
-
-    },
     margem: {
         flexGrow: 1,
         alignItems: "center",
@@ -132,4 +41,14 @@ const styles = StyleSheet.create({
         marginBottom: -10
     }
 })
- 
+
+const mapStateToProps =state=>{
+    const{servicoList} = state;
+    const keys = Object.keys(servicoList);
+    const listaServicosID = keys.map(key=>{
+        return {...servicoList[key], id:key}
+    })
+    return {servicos:listaServicosID};
+}
+//  export default ServicosPage
+export default connect(mapStateToProps,{watchServicos})(ServicosPage)

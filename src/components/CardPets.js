@@ -1,16 +1,30 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Image, Text, View } from 'react-native';
 
 import { TouchableOpacity } from 'react-native';
 
 const CardPets = props => {
-    const { item , onPressItem} = props;
+    const { item , onPressItem, onNavigate} = props;
 
     return (
 
-        <TouchableOpacity onPress={ () =>{onPressItem()}}>
+        <TouchableOpacity onPress={onNavigate}>
                 <View key={item.nomePet} style={styles.line}>
+
+                    <View style={styles.content}>
+                        <Image 
+                             style={styles.avatar}
+                            source={{
+                                uri: `data:image/jpeg;base64,${item.img}`
+                            }
+                            }
+                            resizeMode="cover"
+                            aspectRatio={1}
+                        />
+                    </View>
+                    
                     <View style={styles.beginLline}>
+                        
                         <Text style={styles.lineText}>{item.nomePet}</Text>
                         <Text style={styles.linePet}>{item.tutor}</Text>
                     </View>
@@ -20,63 +34,78 @@ const CardPets = props => {
                     </View>
                 </View>
                 
-        </TouchableOpacity>
+         </TouchableOpacity>  
     )
 
 
 }
 
 const styles = StyleSheet.create({
-                row: {
-                flexDirection: 'row',
-    },
+    
     line: {
-        height: 75,
+        height: 70,
         marginTop: 20,
         marginLeft:20,
         marginRight:20,
         borderRadius: 5,
         borderBottomWidth: 1,
-        alignItems: "baseline",
         flexDirection: 'row',
         borderBottomColor: '#009688',
         backgroundColor:"white"
     },
+    avatar:{
+        margin:8,
+        marginLeft: 20,
+        width: 55, 
+        height:55, 
+        borderRadius: 100/ 2,
+    },
+    content:{
+flexGrow: 1,
+        justifyContent: 'center',
+        flexDirection: 'column',
+    },
     beginLline: {
-                flexGrow: 1,
+        flexGrow: 60,
+        justifyContent: 'space-between',
         flexDirection: 'column',
     },
     finaLline: {
-                flexGrow: 1,
+        flexGrow: 1,
+        marginBottom:10,
         textAlign: "right",
-        alignSelf: "flex-end",
         flexDirection: 'row-reverse',
     },
     lineText: {
-                padding: 5,
+        padding:4,
+        flexGrow: 3,
         paddingLeft: 15,
-        paddingRight: 15,
+        justifyContent: 'space-between',
         fontSize: 16,
         fontWeight: 'bold',
-        color: "#63E3B5"
+        color: "#63E3B5",
+        paddingRight: 15,
+        paddingBottom: -15,
+        marginBottom:-12,
 
     },
     linePet: {
-                padding: 5,
-        paddingTop: 2,
+        
+        flexGrow:1 ,
         paddingLeft: 15,
-        paddingRight: 15,
         fontSize: 16,
         fontWeight: 'bold',
         color: "#a2a2a2"
 
     }, lineAbaixo: {
+        
+        flexGrow:1 ,
                 paddingLeft: 15,
         paddingRight: 15,
-        padding: 5,
         fontSize: 14,
         textAlign: "right",
-        color: "#B0B0B0"
+        color: "#B0B0B0",
+        paddingBottom:2,
     }
 });
 

@@ -1,105 +1,39 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, ActivityIndicator } from 'react-native';
+import { Text, View, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
 import Header from '../components/Header.js'
-import ListAgendamentos from '../components/ListAgendamentos.js'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import ButtonStyledGreen from '../components/ButtonStyledGreen.js';
- 
+import agendamentos from '../agendamentos.json'; 
+import CardAgendamento from '../components/CardAgendamento';
+import {connect} from 'react-redux';
 
-type Props = {};
-export default class AgendamentosPage extends Component<Props> {
-  constructor(props) {
-    super(props);
-    this.imgSource='./src/images/pata.png'
-    this.state = {
-      agendamentos: [],
-      loading:false
-    };
-  }
-  componentDidMount() {
-    this.setState({loading:true})
-    const { content } =
-    {
-      "content": [
-        {
-          "nomePet": "Hulk",
-          "servico": "Limpar as penas",
-          "data": "10/11/2020",
-          "hora": "13:00"
-        },
-        {
-          "nomePet": "Icarozinho",
-          "servico": "Banho + Hidratação",
-          "data": "10/10/2020",
-          "hora": "13:00"
-        },
-        {
-          "nomePet": "Adalberto",
-          "servico": "Hidratação",
-          "data": "10/10/2020",
-          "hora": "16:00"
-        },
-        {
-          "nomePet": "Zeca",
-          "servico": "Banho",
-          "data": "10/10/2020",
-          "hora": "13:00"
-        },
-        {
-          "nomePet": "Mabel",
-          "servico": "Banho + Tosa",
-          "data": "16/06/2020",
-          "hora": "16:20"
-        },
-        {
-          "nomePet": "Icarozinho",
-          "servico": "Banho + Hidratação",
-          "data": "10/10/2020",
-          "hora": "13:00"
-        },
-        {
-          "nomePet": "Adalberto",
-          "servico": "Hidratação",
-          "data": "10/10/2020",
-          "hora": "16:00"
-        },
-        {
-          "nomePet": "Adalberto",
-          "servico": "Hidratação",
-          "data": "10/10/2020",
-          "hora": "16:00"
-        }
-      ]
+import {watchAgendamentos} from '../actions';
+
+class AgendamentosPage extends Component{
+    componentDidMount(){
+        this.props.watchAgendamentos();
     }
-    this.setState({
-      agendamentos: content,
-      loading:false
-    });
-    // const agendamentos = content.map(agendamento => agendamento.nomePet)//PARA PEGAR OS NOMES
 
-  }
-
-
-
-  render() {
-    return (
-      <View style={styles.container}>
-        {
-          this.state.loading ? <ActivityIndicator size="large" color="#E36363"/> : null
-        }
-                <TouchableOpacity style={styles.margem} onPress={() => this.props.navigation.navigate('Agendamento - Editar/Remover')}>
-                    <ButtonStyledGreen 
-                        label={"ADICIONAR AGENDAMENTO"} path={this.imgSource} />
-                </TouchableOpacity>
-
-        <ListAgendamentos 
-        content={this.state.agendamentos}
-        onPressItem={ () => this.props.navigation.navigate('Agendamento - Editar/Remover')}                
-        />
-
-      </View>
-    );
-  }
+    render(){
+        return(
+            <View >
+              <TouchableOpacity style={styles.margem} onPress={() => this.props.navigation.navigate('Agendamento - Editar/Remover')}>
+                  <ButtonStyledGreen
+                      label={"ADICIONAR AGENDAMENTO"} />
+              </TouchableOpacity>
+              <FlatList 
+                  data={[...this.props.agendamentos]}
+                  renderItem={({item}) =>{
+                      return (
+                          <CardAgendamento item={item} 
+                          onNavigate={ () => this.props.navigation.navigate('Agendamento - Detalhes', {item:item})}/>
+                      )
+                  }}
+                  keyExtractor={item=> item.id.toString()}
+              />
+          </View>
+          )
+    }
 }
 const styles = StyleSheet.create({
   container: {
@@ -113,3 +47,13 @@ const styles = StyleSheet.create({
       marginBottom:-10
   }
 })
+const mapStateToProps =state=>{
+    const{agendamentoList} = state;
+    const keys = Object.keys(agendamentoList);
+    const listaAgendamentosID = keys.map(key=>{
+        return {...agendamentoList[key], id:key}
+    })
+    return {agendamentos:listaAgendamentosID};
+}
+// export default AgendamentosPage
+export default connect(mapStateToProps, {watchAgendamentos})(AgendamentosPage)

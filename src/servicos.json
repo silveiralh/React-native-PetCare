@@ -1,0 +1,100 @@
+[
+                {
+                    
+                    "id":0,
+                    "nomeServico": "Banho - Porte Pequeno",
+                    "valor": "0,00",
+                    "tempoEstimado": "00h 40m"
+                },
+                {
+                    
+                    "id":1,
+                    "nomeServico": "Tosa - Porte Pequeno",
+                    "valor": "15,00",
+                    "tempoEstimado": "01h 00m"
+                },
+                {
+                    
+                     "id":2,
+                    "nomeServico": "Hidratação",
+                    "valor": "10,00",
+                    "tempoEstimado": "00h 30m"
+                },
+                {
+                    
+                        "id":3,
+                    "nomeServico": "Hidratação",
+                    "valor": "10,00",
+                    "tempoEstimado": "00h 30m"
+                },
+                {
+                    
+                        "id":4,
+                    "nomeServico": "Hidratação",
+                    "valor": "10,00",
+                    "tempoEstimado": "00h 30m"
+                },
+                {
+                    
+                        "id":5,
+                    "nomeServico": "Hidratação",
+                    "valor": "10,00",
+                    "tempoEstimado": "00h 30m"
+                },
+                {
+                    
+                        "id":6,
+                    "nomeServico": "Hidratação",
+                    "valor": "10,00",
+                    "tempoEstimado": "00h 30m"
+                },
+                {
+                    
+                        "id":7,
+                    "nomeServico": "Banho - Porte Pequeno",
+                    "valor": "0,00",
+                    "tempoEstimado": "00h 40m"
+                },
+                {
+                    
+                        "id":8,
+                    "nomeServico": "Tosa - Porte Pequeno",
+                    "valor": "15,00",
+                    "tempoEstimado": "01h 00m"
+                },
+                {
+                    
+                        "id":9,
+                    "nomeServico": "Hidratação",
+                    "valor": "10,00",
+                    "tempoEstimado": "00h 30m"
+                },
+                {
+                    
+                        "id":10,
+                    "nomeServico": "Hidratação",
+                    "valor": "10,00",
+                    "tempoEstimado": "00h 30m"
+                },
+                {
+                    
+                        "id":11,
+                    "nomeServico": "Hidratação",
+                    "valor": "10,00",
+                    "tempoEstimado": "00h 30m"
+                },
+                {
+                    
+                        "id":12,
+                    "nomeServico": "Hidratação",
+                    "valor": "10,00",
+                    "tempoEstimado": "00h 30m"
+                },
+                {
+                    
+                        "id":13,
+                    "nomeServico": "Hidratação",
+                    "valor": "10,00",
+                    "tempoEstimado": "00h 30m"
+                }
+            ]

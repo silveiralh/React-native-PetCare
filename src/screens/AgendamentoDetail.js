@@ -1,95 +1,103 @@
 import React, { Component } from 'react';
-import { Text, TextInput, Alert, TouchableOpacity, View, StyleSheet } from 'react-native';
-import ButtonStyledGreen from '../components/ButtonStyledGreen';
+import { Text, FlatList, Image,  View, StyleSheet } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import ButtonStyledRed from '../components/ButtonStyledRed';
-import FormRow from '../components/FormRow';
+import ButtonStyledGreen from '../components/ButtonStyledGreen';
+import {connect} from 'react-redux';
+import {deleteAgendamento} from '../actions'
 
-type Props = {};
-export default class AgendamentoDetail extends Component<Props> {
-  onClickListener = (msg) => {
-    Alert.alert("Ação", msg);
-  }
-  onChangeHandler(field, valor) {
-    this.setState({
-      [field]: valor
-    })
-  }
-  render() {
+
+
+const AgendamentoDetail = props => {
+    const { id, nomePet, servico, data, hora } = props.route.params.item;
+
+    
     return (
-      <View style={styles.container}>
+   
+        <View style={styles.container}>
+            <View style={styles.top}>
+                <Text style={styles.titulo}>
+                    {nomePet} 
+                </Text>
+            </View>
+            <View style={styles.content}>
+                <View style={{flexDirection: 'row'}}>
+                    <Text style={styles.bold}>ID: </Text>
+                    <Text style={styles.normal}> {id}   </Text>
+                </View>
+                <View style={{flexDirection: 'row'}}>
+                    <Text  style={styles.bold}>Serviço: </Text>
+                    <Text style={styles.normal}> {servico}</Text>
+                </View>
+                <View style={{flexDirection: 'row'}}>
+                    <Text style={styles.bold}>Data: </Text>
+                    <Text style={styles.normal}> {data}</Text>
+                </View>
+                <View style={{flexDirection: 'row'}}>
+                    <Text style={styles.bold}>Hora: </Text>
+                    <Text style={styles.normal}> {hora}</Text>
+                </View>
+                <TouchableOpacity style={{paddingLeft: 10}} onPress={() => props.navigation.replace('Agendamento - Editar/Remover')
+                    // onPress={async () => {
+                    // await saveAgendamento(agendamentoForm)
+                    // navigation.goBack();
+                    // }
+                    }>
+                        <ButtonStyledGreen label={'EDITAR'} />
+                </TouchableOpacity>
+                <TouchableOpacity style={{paddingLeft: 10}} 
+                    onPress={async () => {
+                        const deletado = await props.deleteAgendamento(props.route.params.item);
+                        if(deletado){
+                            props.navigation.goBack()
+                        }
+                    }}>
+                        <ButtonStyledRed style={{ backgroundColor: "#E36363" }} label={'REMOVER'} />
+                </TouchableOpacity>
+            </View>
+                        
+        </View>
+        )
 
-        <FormRow style={styles.inputContainer}>
-          <TextInput style={styles.inputs}
-            placeholder="Nome do Pet"
-            underlineColorAndroid='transparent'
-            onChangeText={valor => {
-              this.onChangeHandler('nomePet', valor)
-            }}
-          />
-        </FormRow>
-
-        <FormRow style={styles.inputContainer}>
-          <TextInput style={styles.inputs}
-            placeholder="Serviço"
-            underlineColorAndroid='transparent'
-            onChangeText={valor => {
-              this.onChangeHandler('servico', valor)
-            }}
-          />
-        </FormRow>
-        <FormRow style={styles.inputContainer}>
-          <TextInput style={styles.inputs}
-            placeholder="Data"
-            underlineColorAndroid='transparent'
-            onChangeText={valor => {
-              this.onChangeHandler('data', valor)
-            }}
-          />
-        </FormRow>
-        <FormRow style={styles.inputContainer}>
-          <TextInput style={styles.inputs}
-            placeholder="Hora"
-            underlineColorAndroid='transparent'
-            onChangeText={valor => {
-              this.onChangeHandler('hora', valor)
-            }}
-          />
-        </FormRow>
-        <TouchableOpacity onPress={() => this.onClickListener('Agendamento Salvo')} >
-          <ButtonStyledGreen label={'SALVAR EDIÇÕES'} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.onClickListener('Agendamento Removido')}  >
-          <ButtonStyledRed style={{ backgroundColor: "#E36363" }} label={'REMOVER'} />
-        </TouchableOpacity>
-      </View>
-    );
-  }
+    
 }
+export default connect(null, {deleteAgendamento})(AgendamentoDetail);
 const styles = StyleSheet.create({
-  inputContainer: {
-    borderBottomColor: '#009688',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 5,
-    borderBottomWidth: 1,
-    flexGrow: 1,
-    height: 45,
-    marginBottom: 20,
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
-  inputs: {
-
-    height: 45,
-    paddingLeft: 10,
-    borderBottomColor: '#FFFFFF',
-    flexGrow: 1,
-    textAlign: "center"
-  },
-  container: {
-    marginTop:20,
-    padding: 5,
-    paddingLeft: 15,
-    paddingRight: 15,
-    alignItems: "center"
-  }
+    bold:{
+        fontSize: 18, 
+        fontWeight: 'bold',
+        paddingBottom: 10,
+    },
+    titulo:{
+        margin:3,
+        fontSize: 31,
+        fontWeight: 'bold',
+        paddingBottom: 10,
+        color: "white",
+        textAlign: 'center',
+    },
+     normal:{
+        fontSize: 18, 
+        paddingBottom: 10,
+    },
+    top:{
+        justifyContent: 'space-around',
+        borderTopLeftRadius: 100/ 2,
+        height: 100,
+        backgroundColor:"#63E3B5",
+        borderTopRightRadius: 100/ 2,
+    },
+    container:{
+        shadowColor:"black",
+        margin:40,
+    },
+    content:{
+        padding: 30,
+        backgroundColor:"white",
+        height: 330,
+        borderBottomLeftRadius: 100/ 2,
+        borderBottomRightRadius: 100/ 2
+    }
+    
 })
+

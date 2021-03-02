@@ -1,85 +1,99 @@
 import React, { Component } from 'react';
-import { Text, Alert, TextInput, TouchableOpacity, View, StyleSheet } from 'react-native';
+import { Text, FlatList, Image,  View, StyleSheet } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import ButtonStyledRed from '../components/ButtonStyledRed';
 import ButtonStyledGreen from '../components/ButtonStyledGreen';
-import FormRow from '../components/FormRow';
+import {connect} from 'react-redux';
+import {deleteServico} from '../actions'
 
-type Props = {};
-export default class ServicoDetail extends Component<Props> {
+import CardServicos from '../components/CardServicos';
 
-  onClickListener = (msg) => {
-    Alert.alert("Ação", msg);
-  }
-  onChangeHandler(field, valor) {
-    this.setState({
-      [field]: valor
-    })
-  }
-  render() {
+const ServicoDetail = props => {
+    const { id, nomeServico, valor, tempoEstimado } = props.route.params.item;
+
+    
     return (
-      <View style={styles.container}>
-        <FormRow style={styles.inputContainer}>
-          <TextInput style={styles.inputs}
-            placeholder="Nome do Serviço"
-            underlineColorAndroid='transparent'
-            onChangeText={valor => {
-              this.onChangeHandler('nomeServico', valor)
-            }}
-          />
-        </FormRow>
-        <FormRow style={styles.inputContainer}>
-          <TextInput style={styles.inputs}
-            placeholder="Valor"
-            underlineColorAndroid='transparent'
-            onChangeText={valor => {
-              this.onChangeHandler('valor', valor)
-            }}
-          />
-        </FormRow>
-        <FormRow style={styles.inputContainer}>
-          <TextInput style={styles.inputs}
-            placeholder="Tempo Estimado"
-            underlineColorAndroid='transparent'
-            onChangeText={valor => {
-              this.onChangeHandler('tempoEstimado', valor)
-            }}
-          />
-        </FormRow>
-        <TouchableOpacity onPress={() => this.onClickListener('Serviço Salvo')}>
-          <ButtonStyledGreen label={'SALVAR EDIÇÕES'} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.onClickListener('Serviço Removido')} >
-          <ButtonStyledRed style={{ backgroundColor: "#E36363" }} label={'REMOVER'} />
-        </TouchableOpacity>
-      </View>
-    );
-  }
-}
-const styles = StyleSheet.create({
-  inputContainer: {
-    borderBottomColor: '#009688',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 5,
-    borderBottomWidth: 1,
-    flexGrow: 1,
-    height: 45,
-    marginBottom: 20,
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
-  inputs: {
+   
+        <View style={styles.container}>
+            <View style={styles.top}>
+                <Text style={styles.titulo}>
+                    {nomeServico} 
+                </Text>
+            </View>
+            <View style={styles.content}>
+                <View style={{flexDirection: 'row'}}>
+                    <Text style={styles.bold}>ID: </Text>
+                    <Text style={styles.normal}> {id}   </Text>
+                </View>
+                <View style={{flexDirection: 'row'}}>
+                    <Text  style={styles.bold}>Valor: </Text>
+                    <Text style={styles.normal}> {valor}</Text>
+                </View>
+                    <Text style={styles.bold}>Tempo Estimado: </Text>
+                    <Text style={styles.normal}> {tempoEstimado}</Text>
+                <TouchableOpacity  style={{paddingLeft: 10}} onPress={() => props.navigation.replace('Servico - Editar/Remover'
+                // , {servicoToEdit: props.route.params.item}
+                )}
+                    // onPress={async () => {
+                    // await saveAgendamento(agendamentoForm)
+                    // navigation.goBack();
+                    // }}
+                    >
+                        <ButtonStyledGreen label={'EDITAR'} />
+                </TouchableOpacity>
+                <TouchableOpacity style={{paddingLeft: 10}} 
+                    onPress={async () => {
+                        const deletado = await props.deleteServico(props.route.params.item);
+                        if(deletado){
+                            props.navigation.goBack()
+                        }
+                    }}>
+                        <ButtonStyledRed style={{ backgroundColor: "#E36363" }} label={'REMOVER'} />
+                </TouchableOpacity>
+            </View>
+                        
+        </View>
+        )
 
-    height: 45,
-    paddingLeft: 10,
-    borderBottomColor: '#FFFFFF',
-    flexGrow: 1,
-    textAlign: "center"
-  },
-  container: {
-    marginTop: 20,
-    padding: 5,
-    paddingLeft: 15,
-    paddingRight: 15,
-    alignItems: "center"
-  }
+    
+}
+export default connect(null, {deleteServico})(ServicoDetail);
+const styles = StyleSheet.create({
+    bold:{
+        fontSize: 18, 
+        fontWeight: 'bold',
+        paddingBottom: 10,
+    },
+    titulo:{
+        margin:3,
+        fontSize: 31,
+        fontWeight: 'bold',
+        paddingBottom: 10,
+        color: "white",
+        textAlign: 'center',
+    },
+     normal:{
+        fontSize: 18, 
+        paddingBottom: 10,
+    },
+    top:{
+        justifyContent: 'space-around',
+        borderTopLeftRadius: 100/ 2,
+        height: 100,
+        backgroundColor:"#63E3B5",
+        borderTopRightRadius: 100/ 2,
+    },
+    container:{
+        shadowColor:"black",
+        margin:40,
+    },
+    content:{
+        padding: 30,
+        backgroundColor:"white",
+        height: 300,
+        borderBottomLeftRadius: 100/ 2,
+        borderBottomRightRadius: 100/ 2
+    }
+    
 })
+

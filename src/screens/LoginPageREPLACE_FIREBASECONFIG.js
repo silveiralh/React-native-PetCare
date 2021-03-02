@@ -1,4 +1,5 @@
 ﻿import React, { Component } from 'react';
+import {connect} from 'react-redux'
 import FormRow from '../components/FormRow';
 import {
     StyleSheet,
@@ -12,8 +13,9 @@ import {
 import ButtonStyledGreen from '../components/ButtonStyledGreen';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import firebase from 'firebase';
+import {processLogin} from '../actions'
 
-export default class LoginPage extends Component {
+class LoginPage extends Component {
 
     constructor(props) {
         super(props);
@@ -37,63 +39,43 @@ export default class LoginPage extends Component {
             measurementId: ""
         };
         // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
+        if (!firebase.apps.length) {
+             firebase.initializeApp(firebaseConfig);
+        }
     }
     onChangeHandler(field, valor) {
         this.setState({
             [field]: valor
         })
     }
-
+ 
     processLogin() {
         this.setState({ isLoading: true });
-
         const { email, password } = this.state;
 
-        const loginUserSuccess = user => {
-            this.setState({ message: "Sucesso!" });
-            this.props.navigation.navigate('Home');
-        }
-        const loginUserFailed = error => {
-            Alert.alert("Senha fraca", "A senha deve ter mais de 6 caracteres.")
-        }
-
-
-        firebase
-            .auth()
-            .signInWithEmailAndPassword(email, password)
-            .then(loginUserSuccess)
-            .catch(error => {
-                if (error.code == "auth/user-not-found")
-                    Alert.alert(
-                        "Usuário não encontrado",
-                        "Deseja criar um novo usuário?",
-                        [{
-                            text: 'Não',
-
-                        }, {
-                            text: 'Sim',
-                            onPress: () => {
-                                firebase
-                                    .auth()
-                                    .createUserWithEmailAndPassword(email, password)
-                                    .then(loginUserSuccess)
-                                    .catch(loginUserFailed)
-                            }
-                        }],
-                        { cancelable: true }
-                    )
-                this.getMessageByError(error.code)
+        this.props.processLogin({email, password})
+        .then(user=>{
+            if(user){
+                 this.props.navigation.replace('Home');
+            } else{
+                this.setState({
+                isLoading: false,
+                message:'',
             })
-            .then(() => {
-                this.setState({ isLoading: false });
+            }
+        })
+        .catch(error=>{
+            this.setState({
+                isLoading: false,
+                mensagem:this.getMessageByError(error.code),
+                })
 
-            })
-    }
-    onClickListener = (viewId) => {
-        Alert.alert("Alert", "Button pressed " + viewId);
+        })
+
+       
     }
 
+    // função para dar um switch em alguns códigos de erro e atribuir uma mensagem de erro no state.message
     getMessageByError(code) {
 
         switch (code) {
@@ -101,7 +83,7 @@ export default class LoginPage extends Component {
                 return this.setState({ message: "O email não foi encontrado." });
             case "auth/invalid-email":
                 return this.setState({ message: "Digite o email." });
-            case "auth/wrong-password":
+            case "auth/wrong-password":  
                 return this.setState({ message: "A senha está incorreta." });
             case "auth/weak-password":
                 return this.setState({ message: "A senha deve ter mais de 6 caracteres." });
@@ -111,6 +93,7 @@ export default class LoginPage extends Component {
         }
     }
 
+    // função para renderizar o botão
     renderButton() {
         if (this.state.isLoading)
             return <ActivityIndicator size="large" color="#E36363" />;
@@ -119,6 +102,7 @@ export default class LoginPage extends Component {
         );
     }
 
+    // função de exibição da mensagem de erro
     renderMessage() {
         const { message } = this.state;
 
@@ -142,6 +126,7 @@ export default class LoginPage extends Component {
                     <TextInput
                         style={styles.inputs}
                         placeholder="Email"
+                        autoCapitalize="none"
                         keyboardType="email-address"
                         value={this.state.email}
                         underlineColorAndroid='transparent'
@@ -156,12 +141,14 @@ export default class LoginPage extends Component {
                         placeholder="Senha"
                         secureTextEntry={true}
                         value={this.state.password}
+                        autoCapitalize="none"
                         underlineColorAndroid='transparent'
                         onChangeText={valor => {
                             this.onChangeHandler('password', valor)
                         }}
                     />
                 </FormRow>
+                {/* mapeando o clique no botao renderizado */}
                 <TouchableOpacity onPress={() => this.processLogin()}>
                     {this.renderButton()}
                 </TouchableOpacity>
@@ -206,3 +193,5 @@ const styles = StyleSheet.create({
     }
 
 });
+
+export default connect(null, {processLogin})(LoginPage)
